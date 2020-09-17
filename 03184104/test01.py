@@ -53,7 +53,7 @@ class Similarity():
         return ','.join(keywords)
 
     def extract_keyword(content):
-        topnum = 100 #设置关键词数
+        topnum = 200 #设置关键词数
         keywords = jieba.analyse.extract_tags(content,topK=topnum)
         return keywords
 
@@ -64,19 +64,18 @@ class Similarity():
 if __name__ == "__main__":
     starttime = timeit.default_timer() #开始计时
 
-    root = os.getcwd() #与测试文件在同一目录下
+    root = r"C:\Users\csx\Desktop\sim_0.8" # 测试文件夹路径
     filename = get_filenames(root)
     orgin_file = filename[0] #原文件路径
     content = read_file(orgin_file)
     orgin_content = Similarity.pretreatment(content)
     orgin_keywords = Similarity.extract_keyword(orgin_content)
-
-    for i in range(1,len(filename)):
+    print(orgin_keywords)
+    for i in range(1,len(filename)-2):
         copy_file = filename[i]#抄袭文件路径
         content = read_file(copy_file)
         copy_content = Similarity.pretreatment(content)
         copy_keywords = Similarity.extract_keyword(copy_content)
-
         union = set(orgin_keywords).union(set(copy_keywords)) #关键词并集
         word_dict = Similarity.get_dict(union)
         orgin_encode = Similarity.one_hot(word_dict,orgin_keywords) #原文件关键词对应one_hot编码
@@ -85,11 +84,10 @@ if __name__ == "__main__":
 
         same_rate = Similarity.get_cos(sample)
         ans = '%.2f' % same_rate #答案为浮点型，精确到小数点后两位
-        print('{}和{}的重复率为{}'.format(orgin_file,copy_file,ans))
+        print('{}的重复率为{}'.format(copy_file,ans))
 
     endtime = timeit.default_timer() #计时结束
     print('Running time: {:.2f} Seconds'.format(endtime-starttime))
-
 
 
 
