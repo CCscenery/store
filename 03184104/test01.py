@@ -27,7 +27,7 @@ def wirte_file(filepath,ans):
 
 class Similarity():
 
-    def one_hot(word_dict, keywords):  # oneHot编码
+    def term_frequency(word_dict, keywords):  # 词频tf编码
         # cut_code = [word_dict[word] for word in keywords]
         cut_code = [0]*len(word_dict) #初始化
         for word in keywords:
@@ -71,15 +71,15 @@ if __name__ == "__main__":
     orgin_content = Similarity.pretreatment(content)
     orgin_keywords = Similarity.extract_keyword(orgin_content)
     print(orgin_keywords)
-    for i in range(1,len(filename)-2):
+    for i in range(1,len(filename)):
         copy_file = filename[i]#抄袭文件路径
         content = read_file(copy_file)
         copy_content = Similarity.pretreatment(content)
         copy_keywords = Similarity.extract_keyword(copy_content)
         union = set(orgin_keywords).union(set(copy_keywords)) #关键词并集
         word_dict = Similarity.get_dict(union)
-        orgin_encode = Similarity.one_hot(word_dict,orgin_keywords) #原文件关键词对应one_hot编码
-        copy_encode = Similarity.one_hot(word_dict,copy_keywords) #抄袭文件关键词对应one_hot编码
+        orgin_encode = Similarity.term_frequency(word_dict,orgin_keywords) #原文件关键词对应tf编码
+        copy_encode = Similarity.term_frequency(word_dict,copy_keywords) #抄袭文件关键词对应one_hot编码
         sample = [orgin_encode,copy_encode]
 
         same_rate = Similarity.get_cos(sample)

@@ -35,7 +35,7 @@ def wirte_file(filepath,ans): #将答案写入filepath文件
 
 class Similarity():
 
-    def one_hot(word_dict, keywords):  # oneHot编码
+    def term_frequency(word_dict, keywords):  # 词频tf编码
         cut_code = [0]*len(word_dict) #初始化
         for word in keywords:
             cut_code[word_dict[word]] += 1
@@ -83,8 +83,8 @@ if __name__ == "__main__":
 
     union = set(orgin_keywords).union(set(copy_keywords))  # 关键词并集
     word_dict = Similarity.get_dict(union)
-    orgin_encode = Similarity.one_hot(word_dict, orgin_keywords)  # 原文件关键词对应one_hot编码
-    copy_encode = Similarity.one_hot(word_dict, copy_keywords)  # 抄袭文件关键词对应one_hot编码
+    orgin_encode = Similarity.term_frequency(word_dict, orgin_keywords)  # 原文件关键词对应tf编码
+    copy_encode = Similarity.term_frequency(word_dict, copy_keywords)  # 抄袭文件关键词对应tf编码
     sample = [orgin_encode, copy_encode]
 
     same_rate = Similarity.get_cos(sample)
